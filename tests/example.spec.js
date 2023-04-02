@@ -17,7 +17,7 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   const loginBtn = page.locator('#login')
   const addToShoppingCartBtn = 'text= Add to Cart';
   const shoppingCartBtn = page.locator('[routerlink="/dashboard/cart"]')
-  const checkoutBtn = page.locator('.totalRow .btn.btn-primary')
+  const checkoutBtn = page.locator('text=Checkout')
   const couponTxt = page.locator('[name="coupon"]')
   const couponSubmitBtn = page.locator('[type="submit"]')
   const addToShoppingCart = async(row) => {
