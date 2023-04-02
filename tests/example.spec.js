@@ -15,7 +15,7 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   const userNameBtn = page.locator('#userEmail');
   const passwordBtn = page.locator('#userPassword')
   const loginBtn = page.locator('#login')
-  const addToShoppingCartBtn = '.btn.w-10.rounded';
+  const addToShoppingCartBtn = 'text= Add to Cart';
   const shoppingCartBtn = page.locator('[routerlink="/dashboard/cart"]')
   const checkoutBtn = page.locator('.totalRow .btn.btn-primary')
   const couponTxt = page.locator('[name="coupon"]')
@@ -46,8 +46,16 @@ test('homepage has title and links to intro page', async ({ browser }) => {
       break;
      }
   }
-   
+  //expect(found, {message: "Product not found"}).toBeTruthy()
   await shoppingCartBtn.click();
+
+  //replaced by waitFor()
+  //await page.waitForLoadState('networkidle');
+
+  //alternative for page.waitForLoadState('');
+  await page.locator("div ul li").first().waitFor();
+  const productAdded = await page.locator("h3:has-text('"+ productTitle + "')").isVisible()
+  expect(productAdded, {message: "Product was not added in the shopping cart"}).toBeTruthy();
   await checkoutBtn.click();
   await couponTxt.type(couponCode);
   await couponSubmitBtn.click();
