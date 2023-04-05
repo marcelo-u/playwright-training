@@ -8,6 +8,8 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   const password = 'Test123!!';
   const productTitle = 'ZARA COAT 3';
   const couponCode = 'rahulshettyacademy';
+  const autoSuggestCountry = 'arg'
+  const country = ' Argentina'
 
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -20,6 +22,11 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   const checkoutBtn = page.locator('text=Checkout')
   const couponTxt = page.locator('[name="coupon"]')
   const couponSubmitBtn = page.locator('[type="submit"]')
+  const selectCountry = page.locator('[placeholder="Select Country"]')
+  const suggestionList = page.locator('.ta-results');
+  const suggestionItems = page.locator('.ta-results .ta-item')
+  const emailInputText = page.locator('div .user__name input');
+
   const addToShoppingCart = async(row) => {
     await row.locator(addToShoppingCartBtn).click();
   }
@@ -56,7 +63,25 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   await page.locator("div ul li").first().waitFor();
   const productAdded = await page.locator("h3:has-text('"+ productTitle + "')").isVisible()
   expect(productAdded, {message: "Product was not added in the shopping cart"}).toBeTruthy();
+
+
   await checkoutBtn.click();
+  await selectCountry.type("arg", {delay: 500});
+  await suggestionList.waitFor();
+  found = false;
+  for (const row of await suggestionItems.all()) {
+    if (await row.textContent() === country) {
+      await row.click();
+      found = true;
+      break;
+    }
+  }
+  expect(found, {message: "Suggestion not found"}).toBeTruthy();
+
+  console.log("MAIL???" + await emailInputText.nth(0).textContent());
+
+  expect (await emailInputText.nth(0).textContent()).toBe(username);
+
   await couponTxt.type(couponCode);
   await couponSubmitBtn.click();
 
