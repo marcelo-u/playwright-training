@@ -86,3 +86,21 @@ test('homepage has title and links to intro page', async ({ browser }) => {
   await couponSubmitBtn.click();
 
 });
+
+
+test.only("going back and forth", async({page}) => {
+
+  const textInput = page.locator('#displayed-text');
+  const hideBox = page.locator('#hide-textbox');
+
+  const url = 'https://rahulshettyacademy.com/AutomationPractice/';
+  await page.goto(url);
+  //await page.goto('http://google.com');
+  //await page.goBack();
+  //await page.goForward();
+  await expect(textInput).toBeVisible();
+  await hideBox.click();
+  await expect(textInput).toBeHidden();
+
+
+})
